@@ -42,15 +42,80 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 </style>
 
 <style>
-:root { --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-color: #F8F6EE; --border-color: #D1D5DB; }
-.stock-grid-container { width: 100%; overflow-x: auto; margin-top: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
-.stock-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; min-width: 800px; }
-.stock-table th, .stock-table td { border: 1px solid var(--border-color); padding: 12px 15px; text-align: center; font-size: 14px; }
-.stock-table th { background-color: var(--primary-dark); color: white; font-weight: 600; position: sticky; top: 0; }
-.stock-table td:first-child { background-color: #fdfdfd; font-weight: bold; text-align: left; position: sticky; left: 0; z-index: 10; border-right: 2px solid var(--secondary-green); }
+:root {
+    --primary-dark: #2E3A2F;
+    --secondary-green: #6B7F5B;
+    --bg-color: #F8F6EE;
+    --border-color: #D1D5DB;
+    --accent-blue: #eef2ff;
+}
+
+/* Global Layout fix for PC and Mobile */
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.stock-grid-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border: 1px solid var(--border-color);
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    min-width: 1000px; /* Ensures it stays a table on PC, scrolls on mobile */
+}
+
+.stock-table th, .stock-table td {
+    border: 1px solid var(--border-color);
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.stock-table th {
+    background-color: var(--primary-dark);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+}
+
+/* Fixed first column for easy navigation on PC and Mobile */
+.stock-table td:first-child {
+    background-color: #fcfcfc;
+    font-weight: bold;
+    text-align: left;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    border-right: 3px solid var(--secondary-green);
+    min-width: 250px;
+}
+
 .stock-table tr:nth-child(even) { background-color: #f9fafb; }
-.stock-table tr:hover { background-color: #f1f5f9; }
-.stock-value { font-weight: 600; color: var(--primary-dark); }
+.stock-table tr:hover { background-color: #f1f5f9; transition: 0.2s; }
+.stock-value { font-weight: 600; color: var(--primary-dark); font-size: 16px; }
+
+/* Responsive fixes for PC */
+@media (min-width: 1200px) {
+    .stock-table {
+        width: 100%;
+        min-width: auto;
+    }
+}
 </style>
 </head>
 <body>
@@ -303,21 +368,50 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
         const factories = ['Альянс', 'Агро', 'Гулистан'];
         const products = window.productsFromSheet || [];
         if (products.length === 0) return;
-        let html = `<div class="stock-grid-container"><table class="stock-table"><thead><tr><th>Продукт / Сорт</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>Итого</th></tr></thead><tbody>`;
+
+        let html = `<div class="stock-grid-container">
+            <table class="stock-table">
+                <thead>
+                    <tr>
+                        <th>Продукт / Сорт</th>
+                        ${factories.map(f => `<th>${f}</th>`).join('')}
+                        <th>Итого</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
         products.forEach(p => {
-            let rowTotal = 0; let cells = '';
+            let rowTotal = 0;
+            let cells = '';
             factories.forEach(f => {
                 const val = (p.factories && p.factories[f]) ? p.factories[f] : 0;
-                rowTotal += val; cells += `<td class="stock-value">${val}</td>`;
+                rowTotal += val;
+                cells += `<td class="stock-value">${val}</td>`;
             });
-            html += `<tr><td>${p.name} (${p.sku})</td>${cells}<td style="background:#eef2ff; font-weight:bold;">${rowTotal}</td></tr>`;
+            html += `<tr>
+                <td>${p.name} (${p.sku})</td>
+                ${cells}
+                <td style="background: var(--accent-blue); font-weight:bold; color: var(--primary-dark);">${rowTotal}</td>
+            </tr>`;
         });
+
         html += `</tbody></table></div>`;
-        if (container.id === 'main') { container.insertAdjacentHTML('afterbegin', html); } else { container.innerHTML = html; }
+        
+        if (container.id === 'main') {
+            container.insertAdjacentHTML('afterbegin', html);
+        } else {
+            container.innerHTML = html;
+        }
     };
+
     if (window.go) {
         const originalGo = window.go;
-        window.go = function(page) { originalGo(page); if (page === 'dashboard' || page === 'stock') setTimeout(window.renderStockTable, 200); };
+        window.go = function(page) {
+            originalGo(page);
+            if (page === 'dashboard' || page === 'stock') {
+                setTimeout(window.renderStockTable, 200);
+            }
+        };
     }
     window.addEventListener('DOMContentLoaded', window.renderStockTable);
     setTimeout(window.renderStockTable, 1000);
