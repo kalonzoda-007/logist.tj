@@ -285,19 +285,25 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 
 <script>
 (function() {
-    window.productsFromSheet = [{"name": "Высший сорт 1", "weight": "50", "grade": "в/с", "sku": "SKU-000001"}, {"name": "Высший сорт 2", "weight": "50", "grade": "в/с", "sku": "SKU-000002"}, {"name": "Фатир Проф (синий)", "weight": "50", "grade": "1", "sku": "SKU-000003"}, {"name": "Фатир (зард)", "weight": "50", "grade": "1", "sku": "SKU-000004"}, {"name": "Фатир (сурх)", "weight": "50", "grade": "1", "sku": "SKU-000005"}, {"name": "Ачоиб Проф", "weight": "50", "grade": "1", "sku": "SKU-000006"}, {"name": "Ачоиб (сурх)", "weight": "50", "grade": "1", "sku": "SKU-000007"}, {"name": "Ачоиб зард О/С", "weight": "50", "grade": "о/с", "sku": "SKU-000008"}, {"name": "Ачоиб 2-сорт", "weight": "45", "grade": "2", "sku": "SKU-000009"}, {"name": "Босифат А -", "weight": "50", "grade": "1", "sku": "SKU-000010"}, {"name": "Босифат Б ", "weight": "50", "grade": "1", "sku": "SKU-000011"}, {"name": "Босифат В", "weight": "50", "grade": "1", "sku": "SKU-000012"}, {"name": "Босифат Г", "weight": "50", "grade": "о/с", "sku": "SKU-000013"}, {"name": "Босифат Д", "weight": "50", "grade": "о/с", "sku": "SKU-000014"}, {"name": "Босифат Е", "weight": "50", "grade": "о/с", "sku": "SKU-000015"}, {"name": "Дастони Модар А", "weight": "50", "grade": "1", "sku": "SKU-000016"}, {"name": "Дастони Модар Б ", "weight": "50", "grade": "1", "sku": "SKU-000017"}, {"name": "Дастони Модар В", "weight": "50", "grade": "1", "sku": "SKU-000018"}, {"name": "Дастони Модар В (хлеб) ", "weight": "50", "grade": "", "sku": "SKU-000019"}, {"name": "Дастони Модар Г", "weight": "50", "grade": "о/с", "sku": "SKU-000020"}, {"name": "Дастони Модар Д ", "weight": "50", "grade": "о/с", "sku": "SKU-000021"}, {"name": "Дастони Модар Е ", "weight": "50", "grade": "о/с", "sku": "SKU-000022"}, {"name": "Фатир 2-сорт 50", "weight": "50", "grade": "2", "sku": "SKU-000023"}, {"name": "Фатир 2-сорт 45кг", "weight": "45", "grade": "2", "sku": "SKU-000024"}, {"name": "Хлебный край", "weight": "50", "grade": "о/с", "sku": "SKU-000025"}, {"name": "Нон Колобок", "weight": "50", "grade": "о/с", "sku": "SKU-000026"}, {"name": "Фатир Хитой ", "weight": "50", "grade": "1", "sku": "SKU-000027"}, {"name": "Фатир Казок", "weight": "50", "grade": "1", "sku": "SKU-000028"}, {"name": "Байзо Сурх", "weight": "50", "grade": "1", "sku": "SKU-000029"}, {"name": "Азия", "weight": "50", "grade": "1", "sku": "SKU-000030"}, {"name": "Золотое целина 100% ", "weight": "50", "grade": "", "sku": "SKU-000031"}, {"name": "Золотое целина 80%", "weight": "50", "grade": "", "sku": "SKU-000032"}, {"name": "Точ нон Б нав ", "weight": "50", "grade": "1", "sku": "SKU-000033"}, {"name": "Точ нон В", "weight": "50", "grade": "1", "sku": "SKU-000034"}, {"name": "Точ нон Г", "weight": "50", "grade": "о/с", "sku": "SKU-000035"}, {"name": "Табассум (киммат) ", "weight": "50", "grade": "1", "sku": "SKU-000036"}, {"name": "Табассум (арзон)", "weight": "50", "grade": "", "sku": "SKU-000037"}, {"name": "Кормовой", "weight": "45", "grade": "", "sku": "SKU-000038"}, {"name": "Фатир (универ) 25кг ", "weight": "25", "grade": "1", "sku": "SKU-000039"}, {"name": "Высший сорт 10кг", "weight": "10", "grade": "в/с", "sku": "SKU-000040"}, {"name": "Фатир Универсал 10кг", "weight": "10", "grade": "1", "sku": "SKU-000041"}, {"name": "Односорт рузгор", "weight": "10", "grade": "о/с", "sku": "SKU-000042"}, {"name": "Фатир 2-сорт 10кг", "weight": "10", "grade": "2", "sku": "SKU-000043"}, {"name": "Высший сорт 5кг", "weight": "5", "grade": "в/с", "sku": "SKU-000044"}, {"name": "Фатир Универсал 5кг", "weight": "5", "grade": "1", "sku": "SKU-000045"}, {"name": "Савус", "weight": "20", "grade": "", "sku": "SKU-000046"}, {"name": "3 сорт 30кг", "weight": "30", "grade": "3", "sku": "SKU-000047"}, {"name": "3 сорт 25кг", "weight": "25", "grade": "3", "sku": "SKU-000048"}, {"name": "", "weight": "", "grade": "", "sku": "SKU-000049"}, {"name": "", "weight": "", "grade": "", "sku": "SKU-000050"}];
-    console.log('Syncing products from Google Sheets...', window.productsFromSheet.length, 'items found');
+    window.productCodesSystem = {"№": "имя", "": "Перемещения между цехами"};
+    console.log('Codes system loaded:', Object.keys(window.productCodesSystem).length, 'codes found');
     
-    // Update existing state if it exists
-    if (window.state && window.state.products) {
-        window.state.products = window.productsFromSheet;
-    }
+    // Helper function to translate SKU/Code to meaning
+    window.translateCode = function(code) {
+        return window.productCodesSystem[code] || 'Не определено';
+    };
     
-    // Force a re-render of the products page if it's active
-    if (typeof renderProducts === 'function') {
-        renderProducts();
-    } else if (typeof go === 'function') {
-        go('products'); 
+    // If there's a UI function to update details, we can hook into it here
+    if (window.updateOrderDetail) {
+        const original = window.updateOrderDetail;
+        window.updateOrderDetail = function(order) {
+            original(order);
+            // Example: find the code in the order and show meaning
+            if (order.sku) {
+                const meaning = window.translateCode(order.sku);
+                console.log('Order SKU ' + order.sku + ' means: ' + meaning);
+            }
+        };
     }
 })();
 </script>
