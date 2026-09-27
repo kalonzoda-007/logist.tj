@@ -319,7 +319,6 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
             html_table += `<tr><td class="product-name-cell">${p.name} <br><small style="color:#6b7280; font-weight:normal;">${p.sku}</small></td>${cells}<td class="total-cell">${rowTotal}</td><td class="reserve-cell">${reserve}</td></tr>`;
         });
         html_table += `</tbody></table></div></div>`;
-        container.innerHTML = html_table; # Fixed typo
         container.innerHTML = html_table;
     };
     if (window.go) {
