@@ -282,4 +282,52 @@ if(localStorage.getItem('fatir_auth'))document.getElementById('loginLayer').styl
 renderNav();refreshAllPagesLight();
 window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();renderNav()});
 </script>
+
+<script>
+(function() {
+    const API_BASE = "https://logist-backend.onrender.com";
+    window.apiFetch = async function(endpoint, options = { method: 'GET' }) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            if (!response.ok) throw new Error('API Error: ' + response.status);
+            return await response.json();
+        } catch (e) {
+            console.error('Fetch error:', e);
+            return null;
+        }
+    };
+    window.syncProducts = async function() {
+        const data = await window.apiFetch('/products');
+        if (data) {
+            window.productsFromSheet = data;
+            if (typeof renderProducts === 'function') renderProducts();
+        }
+    };
+    window.syncStock = async function() {
+        const data = await window.apiFetch('/stock');
+        if (data) {
+            window.stockData = data;
+            if (typeof renderStockTable === 'function') renderStockTable();
+        }
+    };
+    window.createOrderApi = async function(orderData) {
+        return await window.apiFetch('/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+    };
+    window.addEventListener('DOMContentLoaded', async () => {
+        await window.syncProducts();
+        await window.syncStock();
+    });
+    if (window.go) {
+        const originalGo = window.go;
+        window.go = function(page) {
+            originalGo(page);
+            if (page === 'dashboard' || page === 'stock') window.syncStock();
+        };
+    }
+})();
+</script>
 </body></html>
