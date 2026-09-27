@@ -42,80 +42,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 </style>
 
 <style>
-:root {
-    --primary-dark: #2E3A2F;
-    --secondary-green: #6B7F5B;
-    --bg-color: #F8F6EE;
-    --border-color: #D1D5DB;
-    --accent-blue: #eef2ff;
-}
-
-/* Global Layout fix for PC and Mobile */
-.dashboard-wrapper {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.stock-grid-container {
-    width: 100%;
-    overflow-x: auto;
-    margin: 20px 0;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    border: 1px solid var(--border-color);
-}
-
-.stock-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    min-width: 1000px; /* Ensures it stays a table on PC, scrolls on mobile */
-}
-
-.stock-table th, .stock-table td {
-    border: 1px solid var(--border-color);
-    padding: 15px 20px;
-    text-align: center;
-    font-size: 15px;
-}
-
-.stock-table th {
-    background-color: var(--primary-dark);
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: sticky;
-    top: 0;
-}
-
-/* Fixed first column for easy navigation on PC and Mobile */
-.stock-table td:first-child {
-    background-color: #fcfcfc;
-    font-weight: bold;
-    text-align: left;
-    position: sticky;
-    left: 0;
-    z-index: 10;
-    border-right: 3px solid var(--secondary-green);
-    min-width: 250px;
-}
-
-.stock-table tr:nth-child(even) { background-color: #f9fafb; }
-.stock-table tr:hover { background-color: #f1f5f9; transition: 0.2s; }
-.stock-value { font-weight: 600; color: var(--primary-dark); font-size: 16px; }
-
-/* Responsive fixes for PC */
-@media (min-width: 1200px) {
-    .stock-table {
-        width: 100%;
-        min-width: auto;
-    }
-}
+:root { --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-soft: #F8F6EE; --border-light: #E5E7EB; --accent-blue: #E0E7FF; }
+.stock-page-container { padding: 20px; background-color: var(--bg-soft); min-height: 100vh; }
+.stock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--secondary-green); padding-bottom: 15px; }
+.stock-header h2 { color: var(--primary-dark); font-size: 24px; font-weight: 700; margin: 0; }
+.stock-table-wrapper { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border-light); }
+.modern-stock-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; }
+.modern-stock-table th { background-color: var(--primary-dark); color: #ffffff; padding: 16px; text-align: center; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+.modern-stock-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-light); text-align: center; color: #374151; font-size: 15px; }
+.modern-stock-table tr:nth-child(even) { background-color: #fcfcfc; }
+.modern-stock-table tr:hover { background-color: #f3f4f6; }
+.product-name-cell { text-align: left !important; font-weight: 700; color: var(--primary-dark); background: #fdfdfd; position: sticky; left: 0; z-index: 5; border-right: 2px solid var(--secondary-green) !important; }
+.total-cell { background-color: var(--accent-blue); font-weight: 800; color: var(--primary-dark); }
+.stock-empty { color: #9ca3af; font-style: italic; }
 </style>
 </head>
 <body>
@@ -362,59 +301,33 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 
 <script>
 (function() {
-    window.renderStockTable = function() {
-        const container = document.getElementById('stock-display') || document.getElementById('main');
+    window.renderStockPage = function() {
+        const container = document.getElementById('main') || document.getElementById('app-container');
         if (!container) return;
         const factories = ['Альянс', 'Агро', 'Гулистан'];
         const products = window.productsFromSheet || [];
         if (products.length === 0) return;
-
-        let html = `<div class="stock-grid-container">
-            <table class="stock-table">
-                <thead>
-                    <tr>
-                        <th>Продукт / Сорт</th>
-                        ${factories.map(f => `<th>${f}</th>`).join('')}
-                        <th>Итого</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
+        let html_table = `<div class="stock-page-container"><div class="stock-header"><h2>📦 Остатки по заводам и складам</h2><div style="font-size: 13px; color: #6b7280;">Обновлено: ${new Date().toLocaleDateString()}</div></div><div class="stock-table-wrapper"><table class="modern-stock-table"><thead><tr><th>Наименование товара</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>ОБЩИЙ ИТОГ</th></tr></thead><tbody>`;
         products.forEach(p => {
-            let rowTotal = 0;
-            let cells = '';
+            let rowTotal = 0; let cells = '';
             factories.forEach(f => {
                 const val = (p.factories && p.factories[f]) ? p.factories[f] : 0;
-                rowTotal += val;
-                cells += `<td class="stock-value">${val}</td>`;
+                rowTotal += val; cells += `<td class="${val === 0 ? 'stock-empty' : 'stock-value'}">${val}</td>`;
             });
-            html += `<tr>
-                <td>${p.name} (${p.sku})</td>
-                ${cells}
-                <td style="background: var(--accent-blue); font-weight:bold; color: var(--primary-dark);">${rowTotal}</td>
-            </tr>`;
+            html_table += `<tr><td class="product-name-cell">${p.name} <br><small style="color:#6b7280; font-weight:normal;">${p.sku}</small></td>${cells}<td class="total-cell">${rowTotal}</td></tr>`;
         });
-
-        html += `</tbody></table></div>`;
-        
-        if (container.id === 'main') {
-            container.insertAdjacentHTML('afterbegin', html);
-        } else {
-            container.innerHTML = html;
-        }
+        html_table += `</tbody></table></div></div>`;
+        container.innerHTML = html_table;
     };
-
     if (window.go) {
         const originalGo = window.go;
         window.go = function(page) {
             originalGo(page);
-            if (page === 'dashboard' || page === 'stock') {
-                setTimeout(window.renderStockTable, 200);
-            }
+            if (page === 'stock' || page === 'stock-page' || page === 'остатки') setTimeout(window.renderStockPage, 100);
         };
     }
-    window.addEventListener('DOMContentLoaded', window.renderStockTable);
-    setTimeout(window.renderStockTable, 1000);
+    window.addEventListener('DOMContentLoaded', window.renderStockPage);
+    setTimeout(window.renderStockPage, 1000);
 })();
 </script>
 </body></html>
