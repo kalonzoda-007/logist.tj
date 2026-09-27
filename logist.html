@@ -40,6 +40,18 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @media (max-width:760px){body{padding-bottom:76px}.main{padding:10px 10px 24px}.topbar{height:60px;margin-bottom:6px;flex-wrap:nowrap}.profile-trigger{order:0}.profile-meta{display:none}.profile-trigger .round-logo{width:38px;height:38px}.searchbar{min-width:0;height:40px;flex:1}.top-right .top-pill,.top-right .icon-btn{display:none}.hero-row{display:block;margin:6px 1px 13px}.hero h1{font-size:25px}.hero p{font-size:10px}.hero-actions{margin-top:10px}.hero-actions .btn:not(.primary){display:none}.metrics{grid-template-columns:repeat(2,1fr);gap:8px}.metric{min-height:118px;padding:13px}.metric .num{font-size:25px}.factory-grid{grid-template-columns:125px repeat(3,105px) 105px 105px;min-width:660px}.factory-stock{overflow-x:auto}.section-card{padding:13px}.chart-dark{min-height:230px;padding:14px}.mini-grid{grid-template-columns:repeat(2,1fr)}svg.chart{height:170px}.cards-grid{grid-template-columns:repeat(2,1fr);gap:8px}.product-card{min-height:155px;padding:12px}.queue-row{grid-template-columns:55px 1fr auto}.detail-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.choice-row{grid-template-columns:1fr}.order-math{grid-template-columns:1fr}.mobile-bottom{position:fixed;z-index:70;display:grid;grid-template-columns:repeat(5,1fr);left:10px;right:10px;bottom:10px;height:62px;background:rgba(255,255,255,.80);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.9);border-radius:21px;box-shadow:0 18px 50px rgba(46,58,47,.18);padding:5px}.mobile-bottom button{border:0;background:transparent;border-radius:16px;color:#7a817a;font-size:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.mobile-bottom button.active{background:var(--dark);color:#fff}.mobile-drawer{width:calc(100% - 20px);left:10px;top:10px;bottom:10px}.login-card{padding:22px}.login-card h1{font-size:25px}.top-left{min-width:0}.top-left .profile-trigger{flex:0 0 auto}.searchbar input{font-size:10px}.page-grid .glass{overflow:hidden}.extra-charts{grid-template-columns:1fr}.chart-card{min-height:215px}}
 @media (min-width:761px){.mobile-menu-trigger{display:none!important}}
 </style>
+
+<style>
+:root { --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-color: #F8F6EE; --border-color: #D1D5DB; }
+.stock-grid-container { width: 100%; overflow-x: auto; margin-top: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+.stock-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; min-width: 800px; }
+.stock-table th, .stock-table td { border: 1px solid var(--border-color); padding: 12px 15px; text-align: center; font-size: 14px; }
+.stock-table th { background-color: var(--primary-dark); color: white; font-weight: 600; position: sticky; top: 0; }
+.stock-table td:first-child { background-color: #fdfdfd; font-weight: bold; text-align: left; position: sticky; left: 0; z-index: 10; border-right: 2px solid var(--secondary-green); }
+.stock-table tr:nth-child(even) { background-color: #f9fafb; }
+.stock-table tr:hover { background-color: #f1f5f9; }
+.stock-value { font-weight: 600; color: var(--primary-dark); }
+</style>
 </head>
 <body>
 <div id="loginLayer" class="login-bg">
@@ -281,5 +293,34 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 if(localStorage.getItem('fatir_auth'))document.getElementById('loginLayer').style.display='none';
 renderNav();refreshAllPagesLight();
 window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();renderNav()});
+</script>
+
+<script>
+(function() {
+    window.renderStockTable = function() {
+        const container = document.getElementById('stock-display') || document.getElementById('main');
+        if (!container) return;
+        const factories = ['Альянс', 'Агро', 'Гулистан'];
+        const products = window.productsFromSheet || [];
+        if (products.length === 0) return;
+        let html = `<div class="stock-grid-container"><table class="stock-table"><thead><tr><th>Продукт / Сорт</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>Итого</th></tr></thead><tbody>`;
+        products.forEach(p => {
+            let rowTotal = 0; let cells = '';
+            factories.forEach(f => {
+                const val = (p.factories && p.factories[f]) ? p.factories[f] : 0;
+                rowTotal += val; cells += `<td class="stock-value">${val}</td>`;
+            });
+            html += `<tr><td>${p.name} (${p.sku})</td>${cells}<td style="background:#eef2ff; font-weight:bold;">${rowTotal}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        if (container.id === 'main') { container.insertAdjacentHTML('afterbegin', html); } else { container.innerHTML = html; }
+    };
+    if (window.go) {
+        const originalGo = window.go;
+        window.go = function(page) { originalGo(page); if (page === 'dashboard' || page === 'stock') setTimeout(window.renderStockTable, 200); };
+    }
+    window.addEventListener('DOMContentLoaded', window.renderStockTable);
+    setTimeout(window.renderStockTable, 1000);
+})();
 </script>
 </body></html>
