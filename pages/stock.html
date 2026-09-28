@@ -1,0 +1,48 @@
+
+<div class="page-container">
+    <div class="hero">
+        <h1>Боқиёнд</h1>
+        <p>Намоиши боқиёнди молҳо дар заводҳо ва анборҳо</p>
+    </div>
+    <div class="stock-table-wrapper">
+        <table class="modern-stock-table" id="stockTable">
+            <thead>
+                <tr>
+                    <th>Мол / Намуд</th>
+                    <th>Альянс</th>
+                    <th>Агро</th>
+                    <th>Гулистан</th>
+                    <th>Ҳама</th>
+                    <th>Захира</th>
+                </tr>
+            </thead>
+            <tbody id="stockBody">
+                <!-- Data loaded via JS -->
+                <tr><td colspan="6" style="text-align:center; padding:20px;">Бори faъол кардани маълумот...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    (async function() {
+        const data = await apiRequest('/stock');
+        if (!data) {
+            document.getElementById('stockBody').innerHTML = '<tr><td colspan="6">Хатои боргузорӣ</td></tr>';
+            return;
+        }
+        const products = data.products || [];
+        let rows = '';
+        products.forEach(p => {
+            const total = (p.factories?.Альянс || 0) + (p.factories?.Агро || 0) + (p.factories?.Гулистан || 0);
+            rows += `<tr>
+                <td class="product-name-cell">${p.name}<br><small>${p.sku}</small></td>
+                <td>${p.factories?.Альянс || 0}</td>
+                <td>${p.factories?.Агро || 0}</td>
+                <td>${p.factories?.Гулистан || 0}</td>
+                <td class="total-cell">${total}</td>
+                <td class="reserve-cell">${p.reserved || 0}</td>
+            </tr>`;
+        });
+        document.getElementById('stockBody').innerHTML = rows;
+    })();
+</script>
