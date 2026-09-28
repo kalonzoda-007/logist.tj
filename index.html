@@ -4,41 +4,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLOURFLOW - Control Center</title>
+    <title>FLOURFLOW — Control Center</title>
     <link rel="stylesheet" href="css/main.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-soft); }
+        .app-container { display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { 
+            width: 80px; 
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            border-right: 1px solid var(--border-light); 
+            display: flex; 
+            flex-direction: column; 
+            transition: width 0.3s; 
+            z-index: 100;
+        }
+        .sidebar:hover { width: 260px; }
+        .logo-area { 
+            padding: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 20px;
+        }
+        .logo-circle { 
+            width: 40px; height: 40px; background: var(--primary-dark); 
+            color: white; border-radius: 50%; display: grid; place-items: center; 
+            font-weight: 800; flex-shrink: 0;
+        }
+        .logo-text { 
+            font-weight: 700; font-size: 18px; white-space: nowrap; 
+            opacity: 0; transition: 0.2s; 
+        }
+        .sidebar:hover .logo-text { opacity: 1; }
+        .nav-links { display: flex; flex-direction: column; gap: 8px; padding: 0 12px; }
+        .nav-item { 
+            display: flex; align-items: center; gap: 12px; padding: 12px; 
+            border-radius: 12px; cursor: pointer; transition: 0.2s; 
+            color: var(--primary-dark); text-decoration: none;
+            border: none; background: transparent; width: 100%; text-align: left;
+        }
+        .nav-item:hover { background: rgba(0,0,0,0.05); }
+        .nav-item.active { background: var(--primary-dark); color: white; }
+        .nav-item span { opacity: 0; transition: 0.2s; font-weight: 500; }
+        .sidebar:hover .nav-item span { opacity: 1; }
+        .main-view { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
+        .page-container { max-width: 1400px; margin: 0 auto; }
+        .hero { margin-bottom: 30px; }
+        .hero h1 { font-size: 32px; margin: 0; color: var(--primary-dark); }
+        .hero p { color: var(--muted); margin: 5px 0 0; }
+    </style>
     <script src="js/api.js"></script>
     <script src="js/logic.js"></script>
 </head>
 <body>
     <div class="app-container">
         <nav class="sidebar">
-            <div class="logo">FF</div>
+            <div class="logo-area">
+                <div class="logo-circle">FF</div>
+                <div class="logo-text">FLOURFLOW</div>
+            </div>
             <div class="nav-links">
-                <button onclick="loadPage('stock')">Остатки</button>
-                <button onclick="loadPage('orders')">Заказы</button>
-                <button onclick="loadPage('products')">Товары</button>
+                <button class="nav-item active" onclick="loadPage('stock', this)">
+                    <i data-lucide="package"></i> <span>Боқиёнд</span>
+                </button>
+                <button class="nav-item" onclick="loadPage('orders', this)">
+                    <i data-lucide="shopping-cart"></i> <span>Супоришҳо</span>
+                </button>
+                <button class="nav-item" onclick="loadPage('products', this)">
+                    <i data-lucide="box"></i> <span>Молҳо</span>
+                </button>
             </div>
         </nav>
-        <main class="main-content">
-            <div id="app-container">
-                <!-- Pages load here -->
-                <h1>Добро пожаловать в FLOURFLOW</h1>
-                <p>Выберите раздел в меню слева.</p>
+        <main class="main-view">
+            <div id="app-container" class="page-container">
+                <!-- Content loads here -->
+                <div style="text-align:center; margin-top:100px;">
+                    <h2>Хуш омадед ба FLOURFLOW</h2>
+                    <p>Илтимос, аз менюи чап як бахшро интихоб кунед.</p>
+                </div>
             </div>
         </main>
     </div>
+
     <script>
-        async function loadPage(page) {
+        async function loadPage(page, btn) {
+            // Update active button
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
             const container = document.getElementById('app-container');
-            container.innerHTML = 'Загрузка...';
+            container.innerHTML = '<div style="text-align:center; padding:50px;">Боргузорӣ...</div>';
+            
             try {
                 const response = await fetch(`pages/${page}.html`);
+                if (!response.ok) throw new Error('Page not found');
                 const html = await response.text();
                 container.innerHTML = html;
+                
+                // Re-initialize Lucide icons on the new page
+                if (window.lucide) lucide.createIcons();
             } catch (e) {
-                container.innerHTML = 'Ошибка загрузки страницы.';
+                container.innerHTML = '<div style="text-align:center; padding:50px; color:red;">Хатои боргузории саҳифа. Лутфан, боз санҷед.</div>';
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            // Load stock by default
+            loadPage('stock', document.querySelector('.nav-item.active'));
+        });
     </script>
 </body>
 </html>
