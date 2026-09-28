@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLOURFLOW — Control Center</title>
     <link rel="stylesheet" href="css/main.css">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-soft); }
@@ -53,9 +52,6 @@
         .sidebar:hover .nav-item span { opacity: 1; }
         .main-view { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
         .page-container { max-width: 1400px; margin: 0 auto; }
-        .hero { margin-bottom: 30px; }
-        .hero h1 { font-size: 32px; margin: 0; color: var(--primary-dark); }
-        .hero p { color: var(--muted); margin: 5px 0 0; }
     </style>
     <script src="js/api.js"></script>
     <script src="js/logic.js"></script>
@@ -81,7 +77,6 @@
         </nav>
         <main class="main-view">
             <div id="app-container" class="page-container">
-                <!-- Content loads here -->
                 <div style="text-align:center; margin-top:100px;">
                     <h2>Хуш омадед ба FLOURFLOW</h2>
                     <p>Илтимос, аз менюи чап як бахшро интихоб кунед.</p>
@@ -92,7 +87,6 @@
 
     <script>
         async function loadPage(page, btn) {
-            // Update active button
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
 
@@ -100,12 +94,11 @@
             container.innerHTML = '<div style="text-align:center; padding:50px;">Боргузорӣ...</div>';
             
             try {
-                const response = await fetch(`pages/${page}.html`);
+                // Correct relative path for GitHub Pages
+                const response = await fetch(`./pages/${page}.html`);
                 if (!response.ok) throw new Error('Page not found');
                 const html = await response.text();
                 container.innerHTML = html;
-                
-                // Re-initialize Lucide icons on the new page
                 if (window.lucide) lucide.createIcons();
             } catch (e) {
                 container.innerHTML = '<div style="text-align:center; padding:50px; color:red;">Хатои боргузории саҳифа. Лутфан, боз санҷед.</div>';
@@ -113,8 +106,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            // Load stock by default
+            if (window.lucide) lucide.createIcons();
             loadPage('stock', document.querySelector('.nav-item.active'));
         });
     </script>
