@@ -1,0 +1,45 @@
+
+<div class="page-container">
+    <div class="hero">
+        <h1>Супоришҳо</h1>
+        <p>Идоракунии супоришҳои нави мол</p>
+    </div>
+    <div class="toolbar">
+        <button class="btn primary" onclick="openOrderModal()">＋ Супориши нав</button>
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="ordersTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Муштари</th>
+                    <th>Мол</th>
+                    <th>Миқдор (меш)</th>
+                    <th>Статус</th>
+                    <th>Амал</th>
+                </tr>
+            </thead>
+            <tbody id="ordersBody">
+                <tr><td colspan="6" style="text-align:center; padding:20px;">Боргузорӣ...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    (async function() {
+        const data = await apiRequest('/orders');
+        if (!data) return;
+        let rows = '';
+        data.forEach(o => {
+            rows += `<tr>
+                <td>${o.id}</td>
+                <td>${o.client}</td>
+                <td>${o.productId}</td>
+                <td>${o.qty}</td>
+                <td><span class="badge">${o.status}</span></td>
+                <td><button class="btn mini" onclick="editOrder('${o.id}')">Таҳрир</button></td>
+            </tr>`;
+        });
+        document.getElementById('ordersBody').innerHTML = rows;
+    })();
+</script>
