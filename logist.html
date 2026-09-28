@@ -384,4 +384,57 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
     }
 })();
 </script>
+
+<script>
+(function() {
+    const API_BASE = "https://logist-backend.onrender.com";
+
+    window.apiRequest = async function(endpoint, method = 'GET', body = null) {
+        try {
+            const options = {
+                method: method,
+                headers: { 'Content-Type': 'application/json' }
+            };
+            if (body) options.body = JSON.stringify(body);
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            if (!response.ok) throw new Error('Server error: ' + response.status);
+            return await response.json();
+        } catch (e) {
+            console.error("API Error:", e);
+            alert("Ошибка связи с сервером: " + e.message);
+            return null;
+        }
+    };
+
+    // Override the "imitation" order function
+    const originalSaveOrder = window.saveOrder; 
+    window.saveOrder = async function(orderData) {
+        console.log("Sending real order to backend...", orderData);
+        const result = await window.apiRequest('/orders', 'POST', orderData);
+        if (result) {
+            alert("✅ Заказ РЕАЛЬНО сохранен в базе данных!");
+            window.renderStockTable(); // Refresh stock from real server
+            return true;
+        }
+        return false;
+    };
+
+    // Override the stock loading to be REAL
+    const originalLoadStock = window.loadStock;
+    window.loadStock = async function() {
+        const data = await window.apiRequest('/stock');
+        if (data) {
+            window.productsFromSheet = data.products;
+            window.stockData = data.stock;
+            window.renderStockTable();
+        }
+    };
+
+    // Run load on start
+    document.addEventListener('DOMContentLoaded', () => {
+        window.loadStock();
+    });
+})();
+</script>
 </body></html>
