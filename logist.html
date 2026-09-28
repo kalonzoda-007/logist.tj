@@ -42,13 +42,23 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 </style>
 
 <style>
-:root { --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-soft: #F8F6EE; --border-light: #E5E7EB; --accent-blue: #E0E7FF; --accent-reserve: #FFF7ED; --text-reserve: #C2410C; }
+:root {
+    --primary-dark: #2E3A2F;
+    --secondary-green: #6B7F5B;
+    --bg-soft: #F8F6EE;
+    --border-light: #E5E7EB;
+    --accent-blue: #E0E7FF;
+    --accent-reserve: #FFF7ED;
+    --text-reserve: #C2410C;
+}
+.lucide, .icon, [class*='icon-'] {
+    width: 24px !important;
+    height: 24px !important;
+}
 .stock-page-container { padding: 20px; background-color: var(--bg-soft); min-height: 100vh; }
-.stock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--secondary-green); padding-bottom: 15px; }
-.stock-header h2 { color: var(--primary-dark); font-size: 24px; font-weight: 700; margin: 0; }
 .stock-table-wrapper { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid var(--border-light); }
 .modern-stock-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; min-width: 1100px; }
-.modern-stock-table th, .modern-//stock-table td { padding: 14px 16px; border: 1px solid var(--border-light); text-align: center; font-size: 14px; }
+.modern-stock-table th, .modern-stock-table td { padding: 14px 16px; border: 1px solid var(--border-light); text-align: center; font-size: 14px; }
 .modern-stock-table th { background-color: var(--primary-dark); color: #ffffff; font-weight: 600; text-transform: uppercase; position: sticky; top: 0; z-index: 10; }
 .product-name-cell { text-align: left !important; font-weight: 700; color: var(--primary-dark); background: #fdfdfd; position: sticky; left: 0; z-index: 11; border-right: 3px solid var(--secondary-green) !important; min-width: 200px; }
 .total-cell { background-color: var(--accent-blue); font-weight: 800; color: var(--primary-dark); }
@@ -56,7 +66,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .stock-empty { color: #9ca3af; font-style: italic; }
 .modern-stock-table tr:nth-child(even) { background-color: #fcfcfc; }
 .modern-stock-table tr:hover { background-color: #f1f5f9; }
-.lucide, .icon, [class*='icon-'] { width: 24px !important; height: 24px !important; }
 </style>
 </head>
 <body>
@@ -303,8 +312,7 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 
 <script>
 (function() {
-    window.regionsMap = {"Согд": ["Худжанд", "Истаравшан", "Пенджикент", "Ашт", "Келал", "Замидуван"], "Душанбе": ["Душанбе", "Варохша"], "Хатлон": ["Бохтар", "Курган-Тюбе", "Исм. Московский", "Шахрибоз", "Сарифазо"], "Бадахшан": ["Хорог", "Ишкашим", "Шемини", "Ванч"]};
-    window.clientBase = [{"name": "Клиент 1", "region": "Согд", "district": "Худжанд"}, {"name": "Клиент 2", "region": "Душанбе", "district": "Душанбе"}];
+    window.regionsMap = {"Согд": ["Худжанд", "Истаравшан", "Пенджикент", "Ашт", "Келал", "Замидуван", "Исфара"], "Душанбе": ["Душанбе", "Варохша", "Рудаки"], "Хатлон": ["Бохтар", "Курган-Тюбе", "Исм. Московский", "Шахрибоз", "Сарифазо", "Ходжейли"], "Бадахшан": ["Хорог", "Ишкашим", "Шемини", "Ванч", "Мургхаб"]};
     
     window.updateDistricts = function(regionName) {
         const districtSelect = document.getElementById('district-select');
@@ -314,35 +322,41 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
             districts.map(d => `<option value="${d}">${d}</option>`).join('');
     };
 
+    window.calculateOrderWeight = function(sku, bags) {
+        const product = window.productsFromSheet ? window.productsFromSheet.find(p => p.sku === sku) : null;
+        const weight = product ? product.weight : 50;
+        return bags * weight;
+    };
+
     window.renderStockTable = function() {
         const container = document.getElementById('main') || document.getElementById('app-container');
         if (!container) return;
         const factories = ['Альянс', 'Агро', 'Гулистан'];
         const products = window.productsFromSheet || [];
-        if (products.length === 0) return;
-        let html_table = `<div class="stock-page-container"><div class="stock-header"><h2>📦 Остатки по заводам и складам</h2><div style="font-size: 13px; color: #6b7280;">Обновлено: ${new Date().toLocaleDateString()}</div></div><div class="stock-table-wrapper"><table class="modern-stock-table"><thead><tr><th>Товар</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>Всего</th><th style="border-left: 4px solid #FED7AA;">Резерв</th></tr></thead><tbody>`;
+        
+        let html = `<div class="stock-table-wrapper"><table class="modern-stock-table"><thead><tr><th>Товар / Сорт</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>Всего</th><th>Резерв</th></tr></thead><tbody>`;
+        
         products.forEach(p => {
-            let rowTotal = 0; let cells = '';
+            let rowTotal = 0;
+            let cells = '';
             factories.forEach(f => {
                 const val = (p.factories && p.factories[f]) ? p.factories[f] : 0;
-                rowTotal += val; cells += `<td class="${val === 0 ? 'stock-empty' : 'stock-value'}">${val}</td>`;
+                rowTotal += val;
+                cells += `<td class="${val === 0 ? 'stock-empty' : 'stock-value'}">${val}</td>`;
             });
-            const reserve = p.reserved || 0;
-            html_table += `<tr><td class="product-name-cell">${p.name} <br><small style="color:#6b7280; font-weight:normal;">${p.sku}</small></td>${cells}<td class="total-cell">${rowTotal}</td><td class="reserve-cell">${reserve}</td></tr>`;
+            html += `<tr><td class="product-name-cell">${p.name} <br><small>${p.sku}</small></td>${cells}<td class="total-cell">${rowTotal}</td><td class="reserve-cell">${p.reserved || 0}</td></tr>`;
         });
-        html_table += `</tbody></table></div></div>`;
-        container.innerHTML = html_table;
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
     };
-    
+
     if (window.go) {
         const originalGo = window.go;
         window.go = function(page) {
             originalGo(page);
-            if (page === 'stock' || page === 'stock-page' || page === 'остатки') setTimeout(window.renderStockPage, 100);
+            if (page === 'stock' || page === 'dashboard') setTimeout(window.renderStockTable, 100);
         };
     }
-    window.addEventListener('DOMContentLoaded', window.renderStockPage);
-    setTimeout(window.renderStockPage, 1000);
 })();
 </script>
 </body></html>
