@@ -1,32 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<style>
-#auth-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(46, 58, 47, 0.9); backdrop-filter: blur(10px);
-    display: flex; align-items: center; justify-content: center; z-index: 9999;
-}
-.auth-card {
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 24px;
-    padding: 40px; width: 100%; max-width: 400px; text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3); color: white;
-}
-.auth-card h2 { margin-bottom: 20px; font-family: 'Inter', sans-serif; font-weight: 700; }
-.auth-input {
-    width: 100%; padding: 12px 16px; margin-bottom: 15px;
-    border-radius: 12px; border: 1px solid rgba(255,255,255,0.4);
-    background: rgba(255,255,255,0.1); color: white; outline: none;
-}
-.auth-input::placeholder { color: rgba(255,255,255,0.6); }
-.auth-btn {
-    width: 100%; padding: 12px; border-radius: 12px; border: none;
-    background: #6B7F5B; color: white; font-weight: 600; cursor: pointer;
-    transition: 0.3s;
-}
-.auth-btn:hover { background: #56684a; }
-</style>
+
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -714,44 +689,9 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 
 <script>
 (function() {
-    window.handleLogin = async function() {
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-        
-        if(!user || !pass) { alert('Введите логин и пароль'); return; }
-    // Master Access Bypass for Admin
-    if (user === 'kalonzoda007' && pass === 'Spitamen96') {
-        localStorage.setItem('flourflow_token', 'MASTER_ADMIN_TOKEN');
-        localStorage.setItem('flourflow_user', 'Kalonzoda (Admin)');
-        localStorage.setItem('flourflow_role', 'admin');
-        document.getElementById('auth-overlay').style.display = 'none';
-        alert('✅ Мастер-доступ активирован. Добро пожаловать, Админ!');
-        if (window.loadStock) window.loadStock();
-        return; 
-    }
     
 
-        console.log("Attempting login for:", user);
-        const res = await window.apiRequest('/login', 'POST', { username: user, password: pass });
-        
-        if (res && res.token) {
-            localStorage.setItem('flourflow_token', res.token);
-            localStorage.setItem('flourflow_user', res.user);
-            localStorage.setItem('flourflow_role', res.role);
-            document.getElementById('auth-overlay').style.display = 'none';
-            alert('✅ Добро пожаловать, ' + res.user);
-            window.loadStock(); // Load data after login
-        } else {
-            alert('❌ Ошибка: Неверный логин или пароль');
-        }
-    };
-
-    window.handleLogout = function() {
-        localStorage.removeItem('flourflow_token');
-        localStorage.removeItem('flourflow_user');
-        localStorage.removeItem('flourflow_role');
-        location.reload();
-    };
+    
 
     // Check for existing token on load
     document.addEventListener('DOMContentLoaded', () => {
@@ -766,36 +706,7 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 
 <script>
 (function() {
-    window.handleLogin = async function() {
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-        
-        if(!user || !pass) { alert('Введите логин и пароль'); return; }
-    // Master Access Bypass for Admin
-    if (user === 'kalonzoda007' && pass === 'Spitamen96') {
-        localStorage.setItem('flourflow_token', 'MASTER_ADMIN_TOKEN');
-        localStorage.setItem('flourflow_user', 'Kalonzoda (Admin)');
-        localStorage.setItem('flourflow_role', 'admin');
-        document.getElementById('auth-overlay').style.display = 'none';
-        alert('✅ Мастер-доступ активирован. Добро пожаловать, Админ!');
-        if (window.loadStock) window.loadStock();
-        return; 
-    }
     
-
-        const res = await window.apiRequest('/login', 'POST', { username: user, password: pass });
-        
-        if (res && res.token) {
-            localStorage.setItem('flourflow_token', res.token);
-            localStorage.setItem('flourflow_user', res.user);
-            localStorage.setItem('flourflow_role', res.role);
-            document.getElementById('auth-overlay').style.display = 'none';
-            alert('✅ Добро пожаловать, ' + res.user);
-            if (window.loadStock) window.loadStock();
-        } else {
-            alert('❌ Ошибка: Неверный логин или пароль');
-        }
-    };
 
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('flourflow_token');
