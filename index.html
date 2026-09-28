@@ -42,47 +42,27 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 </style>
 
 <style>
-/* Light Mode variables */
+:root {
+    --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-soft: #F8F6EE; --border-light: #E5E7EB;
+    --text-main: #2E3A2F; --glass: rgba(255,255,255,0.7);
+}
 body.light-mode {
-    --primary-dark: #f0f2f0;
-    --secondary-green: #4a5d3d;
-    --bg-soft: #ffffff;
-    --border-light: #d1d5db;
-    --text-main: #1f2937;
-    background-color: #ffffff !important;
-    color: #1f2937 !important;
+    --primary-dark: #1f2937; --secondary-green: #4a5d3d; --bg-soft: #ffffff; --border-light: #d1d5db;
+    --text-main: #111827; --glass: rgba(255,255,255,0.9);
 }
-body.light-mode .glass {
-    background: rgba(255, 255, 255, 0.8) !important;
-    border: 1px solid #d1d5db !important;
-    color: #1f2937 !important;
-}
-body.light-mode .product-name-cell { color: #1f2937 !important; }
+body { background-color: var(--bg-soft) !important; color: var(--text-main) !important; transition: all 0.3s ease; }
+.glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border-light); }
 
-/* Theme & Lang Toggles in Sidebar */
 .sidebar-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 15px;
-    border-top: 1px solid rgba(46,58,47,.1);
-    margin-top: auto;
+    position: absolute; bottom: 20px; left: 0; right: 0;
+    display: flex; flex-direction: column; gap: 10px; padding: 0 12px;
 }
 .control-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    background: rgba(255,255,255,.1);
-    color: inherit;
-    font-size: 12px;
-    border: 1px solid rgba(255,255,255,.1);
-    transition: 0.3s;
+    display: flex; align-items: center; gap: 8px; padding: 10px;
+    border-radius: 10px; cursor: pointer; background: rgba(0,0,0,0.05);
+    font-size: 12px; border: 1px solid rgba(0,0,0,0.1); transition: 0.2s;
 }
-.control-btn:hover { background: rgba(255,255,255,.2); }
-.control-btn i { width: 18px; height: 18px; }
+.control-btn:hover { background: rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
@@ -102,10 +82,10 @@ body.light-mode .product-name-cell { color: #1f2937 !important; }
     <div class="drawer-section">Основное</div><nav id="drawerNav" class="drawer-nav">
     <div class="sidebar-controls">
         <div class="control-btn" onclick="toggleTheme()">
-            <i data-lucide="sun"></i> <span id="theme-text">Режими рӯшан</span>
+            <span>🌓 Режим</span>
         </div>
-        <div class="control-btn" onclick="toggleLanguage()">
-            <i data-lucide="languages"></i> <span id="lang-text">Тоҷикӣ</span>
+        <div class="control,btn" onclick="toggleLang()">
+            <span>🌐 Забон (TJ/RU)</span>
         </div>
     </div>
     </nav>
@@ -152,10 +132,10 @@ body.light-mode .product-name-cell { color: #1f2937 !important; }
 <nav id="mobileBottom" class="mobile-bottom">
     <div class="sidebar-controls">
         <div class="control-btn" onclick="toggleTheme()">
-            <i data-lucide="sun"></i> <span id="theme-text">Режими рӯшан</span>
+            <span>🌓 Режим</span>
         </div>
-        <div class="control-btn" onclick="toggleLanguage()">
-            <i data-lucide="languages"></i> <span id="lang-text">Тоҷикӣ</span>
+        <div class="control,btn" onclick="toggleLang()">
+            <span>🌐 Забон (TJ/RU)</span>
         </div>
     </div>
     </nav>
@@ -374,40 +354,23 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
 <script>
 (function() {
     window.toggleTheme = function() {
-        const body = document.body;
-        const text = document.getElementById('theme-text');
-        if (body.classList.contains('light-mode')) {
-            body.classList.remove('light-mode');
-            if(text) text.innerText = 'Светлый режим';
-            localStorage.setItem('flourflow_theme', 'dark');
-        } else {
-            body.classList.add('light-mode');
-            if(text) text.innerText = 'Темный режим';
-            localStorage.setItem('flourflow_theme', 'light');
-        }
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('flourflow_theme', isLight ? 'light' : 'dark');
     };
 
-    window.toggleLanguage = function() {
-        const text = document.getElementById('lang-text');
-        if (text.innerText === 'Тоҷикӣ') {
-            text.innerText = 'Русский';
-            localStorage.setItem('flourflow_lang', 'ru');
-        } else {
-            text.innerText = 'Тоҷикӣ';
-            localStorage.setItem('flourflow_lang', 'tj');
-        }
-        // In a real app, we'd reload the page with different translation files.
-        alert('Забон иваз шуд. Барои татбиқ саҳифаро навомроз кунед.');
+    window.toggleLang = function() {
+        const currentLang = localStorage.getItem('flourflow_lang') || 'tj';
+        const nextLang = currentLang === 'tj' ? 'ru' : 'tj';
+        localStorage.setItem('flourflow_lang', nextLang);
+        alert('Забон иваз шуд. Лутфан, саҳифаро навомроз кунед.');
+        location.reload();
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        const theme = localStorage.getItem('flourflow_theme');
-        if (theme === 'light') {
+        if (localStorage.getItem('flourflow_theme') === 'light') {
             document.body.classList.add('light-mode');
-            const text = document.getElementById('theme-text');
-            if(text) text.innerText = 'Темный режим';
         }
-        if (window.lucide) lucide.createIcons();
     });
 })();
 </script>
