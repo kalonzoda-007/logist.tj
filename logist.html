@@ -40,32 +40,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @media (max-width:760px){body{padding-bottom:76px}.main{padding:10px 10px 24px}.topbar{height:60px;margin-bottom:6px;flex-wrap:nowrap}.profile-trigger{order:0}.profile-meta{display:none}.profile-trigger .round-logo{width:38px;height:38px}.searchbar{min-width:0;height:40px;flex:1}.top-right .top-pill,.top-right .icon-btn{display:none}.hero-row{display:block;margin:6px 1px 13px}.hero h1{font-size:25px}.hero p{font-size:10px}.hero-actions{margin-top:10px}.hero-actions .btn:not(.primary){display:none}.metrics{grid-template-columns:repeat(2,1fr);gap:8px}.metric{min-height:118px;padding:13px}.metric .num{font-size:25px}.factory-grid{grid-template-columns:125px repeat(3,105px) 105px 105px;min-width:660px}.factory-stock{overflow-x:auto}.section-card{padding:13px}.chart-dark{min-height:230px;padding:14px}.mini-grid{grid-template-columns:repeat(2,1fr)}svg.chart{height:170px}.cards-grid{grid-template-columns:repeat(2,1fr);gap:8px}.product-card{min-height:155px;padding:12px}.queue-row{grid-template-columns:55px 1fr auto}.detail-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.choice-row{grid-template-columns:1fr}.order-math{grid-template-columns:1fr}.mobile-bottom{position:fixed;z-index:70;display:grid;grid-template-columns:repeat(5,1fr);left:10px;right:10px;bottom:10px;height:62px;background:rgba(255,255,255,.80);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.9);border-radius:21px;box-shadow:0 18px 50px rgba(46,58,47,.18);padding:5px}.mobile-bottom button{border:0;background:transparent;border-radius:16px;color:#7a817a;font-size:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.mobile-bottom button.active{background:var(--dark);color:#fff}.mobile-drawer{width:calc(100% - 20px);left:10px;top:10px;bottom:10px}.login-card{padding:22px}.login-card h1{font-size:25px}.top-left{min-width:0}.top-left .profile-trigger{flex:0 0 auto}.searchbar input{font-size:10px}.page-grid .glass{overflow:hidden}.extra-charts{grid-template-columns:1fr}.chart-card{min-height:215px}}
 @media (min-width:761px){.mobile-menu-trigger{display:none!important}}
 </style>
-
-<style>
-:root {
-    --primary-dark: #2E3A2F;
-    --secondary-green: #6B7F5B;
-    --bg-soft: #F8F6EE;
-    --border-light: #E5E7EB;
-    --accent-blue: #E0E7FF;
-    --accent-reserve: #FFF7ED;
-    --text-reserve: #C2410C;
-}
-.lucide, .icon, [class*='icon-'] {
-    width: 24px !important;
-    height: 24px !important;
-}
-.stock-table-wrapper { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid var(--border-light); }
-.modern-stock-table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; min-width: 1100px; }
-.modern-stock-table th, .modern-stock-table td { padding: 14px 16px; border: 1px solid var(--border-light); text-align: center; font-size: 14px; }
-.modern-stock-table th { background-color: var(--primary-dark); color: #ffffff; font-weight: 600; text-transform: uppercase; position: sticky; top: 0; z-index: 10; }
-.product-name-cell { text-align: left !important; font-weight: 700; color: var(--primary-dark); background: #fdfdfd; position: sticky; left: 0; z-index: 11; border-right: 3px solid var(--secondary-green) !important; min-width: 200px; }
-.total-cell { background-color: var(--accent-blue); font-weight: 800; color: var(--primary-dark); }
-.reserve-cell { background-color: var(--accent-reserve); font-weight: 800; color: var(--text-reserve); border-left: 3px solid #FED7AA !important; position: sticky; right: 0; z-index: 10; }
-.stock-empty { color: #9ca3af; font-style: italic; }
-.modern-stock-table tr:nth-child(even) { background-color: #fcfcfc; }
-.modern-stock-table tr:hover { background-color: #f1f5f9; }
-</style>
 </head>
 <body>
 <div id="loginLayer" class="login-bg">
@@ -334,54 +308,4 @@ if(localStorage.getItem('fatir_auth'))document.getElementById('loginLayer').styl
 renderNav();refreshAllPagesLight();
 window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();renderNav()});
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a41e853f3cd65d5a',t:'MTc5MDU1NDE3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>
-(function() {
-    window.regionsMap = {"Согд": ["Худжанд", "Истаравшан", "Пенджикент", "Ашт", "Келал", "Замидуван", "Исфара"], "Душанбе": ["Душанбе", "Варохша", "Рудаки"], "Хатлон": ["Бохтар", "Курган-Тюбе", "Исм. Московский", "Шахрибоз", "Сарифазо", "Ходжейли"], "Бадахшан": ["Хорог", "Ишкашим", "Шемини", "Ванч", "Мургхаб"]};
-    
-    window.updateDistricts = function(regionName) {
-        const districtSelect = document.getElementById('district-select');
-        if (!districtSelect) return;
-        const districts = window.regionsMap[regionName] || [];
-        districtSelect.innerHTML = '<option value="">Выберите район</option>' + 
-            districts.map(d => `<option value="${d}">${d}</option>`).join('');
-    };
-
-    window.calculateOrderWeight = function(sku, bags) {
-        const product = window.productsFromSheet ? window.productsFromSheet.find(p => p.sku === sku) : null;
-        const weight = product ? product.weight : 50;
-        return bags * weight;
-    };
-
-    window.renderStockTable = function() {
-        const container = document.getElementById('main') || document.getElementById('app-container');
-        if (!container) return;
-        const factories = ['Альянс', 'Агро', 'Гулистан'];
-        const products = window.productsFromSheet || [];
-        
-        let html = `<div class="stock-table-wrapper"><table class="modern-stock-table"><thead><tr><th>Товар / Сорт</th>${factories.map(f => `<th>${f}</th>`).join('')}<th>Всего</th><th>Резерв</th></tr></thead><tbody>`;
-        
-        products.forEach(p => {
-            let rowTotal = 0;
-            let cells = '';
-            factories.forEach(f => {
-                const val = (p.factories && p.factories[f]) ? p.factories[f] : 0;
-                rowTotal += val;
-                cells += `<td class="${val === 0 ? 'stock-empty' : 'stock-value'}">${val}</td>`;
-            });
-            html += `<tr><td class="product-name-cell">${p.name} <br><small>${p.sku}</small></td>${cells}<td class="total-cell">${rowTotal}</td><td class="reserve-cell">${p.reserved || 0}</td></tr>`;
-        });
-        html += '</tbody></table></div>';
-        container.innerHTML = html;
-    };
-
-    if (window.go) {
-        const originalGo = window.go;
-        window.go = function(page) {
-            originalGo(page);
-            if (page === 'stock' || page === 'dashboard') setTimeout(window.renderStockTable, 100);
-        };
-    }
-})();
-</script>
-</body></html>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a41e853f3cd65d5a',t:'MTc5MDU1NDE3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body></html>
