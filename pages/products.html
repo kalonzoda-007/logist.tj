@@ -1,0 +1,27 @@
+
+<div class="page-container">
+    <div class="hero">
+        <h1>Каталоги молҳо</i>
+        <p>Идоракунии намудҳо ва вазнҳои молҳо</p>
+    </div>
+    <div class="cards-grid" id="productsGrid">
+        <!-- Loaded via JS -->
+    </div>
+</div>
+<script>
+    (async function() {
+        const data = await apiRequest('/products');
+        if (!data) return;
+        let cards = '';
+        data.forEach(p => {
+            cards += `<div class="product-card">
+                <div class="iconbox">📦</div>
+                <h4>${p.name}</h4>
+                <p>${p.sku} · ${p.grade}</p>
+                <div class="qty">${p.packKg} кг</div>
+                <div class="foot"><span>Вазн як хол</span></div>
+            </div>`;
+        });
+        document.getElementById('productsGrid').innerHTML = cards;
+    })();
+</script>
