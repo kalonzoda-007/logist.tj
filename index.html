@@ -41,28 +41,37 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @media (min-width:761px){.mobile-menu-trigger{display:none!important}}
 </style>
 
-<style>
+<style id="critical-theme-css">
 :root {
     --primary-dark: #2E3A2F; --secondary-green: #6B7F5B; --bg-soft: #F8F6EE; --border-light: #E5E7EB;
     --text-main: #2E3A2F; --glass: rgba(255,255,255,0.7);
 }
 body.light-mode {
-    --primary-dark: #1f2937; --secondary-green: #4a5d3d; --bg-soft: #ffffff; --border-light: #d1d5db;
-    --text-main: #111827; --glass: rgba(255,255,255,0.9);
+    --primary-dark: #1f2937 !important;
+    --secondary-green: #4a5d3d !important;
+    --bg-soft: #ffffff !important;
+    --border-light: #d1d5db !important;
+    --text-main: #111827 !important;
+    --glass: rgba(255,255,255,0.9) !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
 }
-body { background-color: var(--bg-soft) !important; color: var(--text-main) !important; transition: all 0.3s ease; }
-.glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border-light); }
-
+body.light-mode .glass, body.light-mode .card, body.light-mode .stock-table-wrapper {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
 .sidebar-controls {
     position: absolute; bottom: 20px; left: 0; right: 0;
-    display: flex; flex-direction: column; gap: 10px; padding: 0 12px;
+    display: flex; flex-direction: column; gap: 10px; padding: 0 15px;
 }
 .control-btn {
-    display: flex; align-items: center; gap: 8px; padding: 10px;
-    border-radius: 10px; cursor: pointer; background: rgba(0,0,0,0.05);
-    font-size: 12px; border: 1px solid rgba(0,0,0,0.1); transition: 0.2s;
+    display: flex; align-items: center; gap: 10px; padding: 12px;
+    border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.1);
+    font-size: 13px; border: 1px solid rgba(0,0,0,0.1); transition: 0.3s;
+    color: inherit;
 }
-.control-btn:hover { background: rgba(0,0,0,0.1); }
+.control-btn:hover { background: rgba(0,0,0,0.2); }
 </style>
 </head>
 <body>
@@ -84,7 +93,7 @@ body { background-color: var(--bg-soft) !important; color: var(--text-main) !imp
         <div class="control-btn" onclick="toggleTheme()">
             <span>🌓 Режим</span>
         </div>
-        <div class="control,btn" onclick="toggleLang()">
+        <div class="control-btn" onclick="toggleLang()">
             <span>🌐 Забон (TJ/RU)</span>
         </div>
     </div>
@@ -134,7 +143,7 @@ body { background-color: var(--bg-soft) !important; color: var(--text-main) !imp
         <div class="control-btn" onclick="toggleTheme()">
             <span>🌓 Режим</span>
         </div>
-        <div class="control,btn" onclick="toggleLang()">
+        <div class="control-btn" onclick="toggleLang()">
             <span>🌐 Забон (TJ/RU)</span>
         </div>
     </div>
