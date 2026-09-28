@@ -93,15 +93,253 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .modern-stock-table tr:nth-child(even) { background-color: #fcfcfc; }
 .modern-stock-table tr:hover { background-color: #f1f5f9; }
 </style>
-</head>
+<style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #0d0e12;
+      color: #f9f9f9;
+      overflow: hidden;
+    }
+
+    /* Фоновый градиент и анимации */
+    .background {
+      position: fixed;
+      top: -55vmin;
+      left: -55vmin;
+      width: 110vmin;
+      height: 110vmin;
+      border-radius: 47% 53% 61% 39% / 45% 51% 49% 55%;
+      background: #6a65ff;
+    }
+
+    .background::after {
+      content: "";
+      position: inherit;
+      right: -55vmin;
+      bottom: -55vmin;
+      width: inherit;
+      height: inherit;
+      border-radius: inherit;
+      background: #3c85fe;
+    }
+
+    /* Карточка */
+    .card {
+      overflow: hidden;
+      position: relative;
+      z-index: 3;
+      width: 94%;
+      margin: 0 20px;
+      padding: 60px 30px 40px;
+      border-radius: 48px;
+      border: 6px solid rgb(255 255 255 / 4%);
+      background: rgb(255 255 255 / 4%);
+      backdrop-filter: blur(44px);
+      text-align: center;
+      box-shadow: 0 100px 100px rgb(0 0 0 / 10%);
+    }
+
+    .card img {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 24px;
+      border: 6px solid rgb(255 255 255 / 14%);
+      border-radius: 50%;
+      padding: 12px;
+      object-fit: contain;
+    }
+
+    .card h2 {
+      margin: 0 0 28px;
+      font-size: 24px;
+    }
+
+    /* Управление переключением форм */
+    .form-container {
+      display: none;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    form a.forgot-link {
+      opacity: 0.75;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      margin-bottom: 12px;
+      color: #f9f9f9;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .textbox {
+      position: relative;
+    }
+
+    .textbox i {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      translate: 0 -50%;
+      color: #f9f9f9;
+    }
+
+    input, button {
+      width: 100%;
+      height: 56px;
+      border-radius: 28px;
+      transition: 0.3s;
+      font-size: 15px;
+    }
+
+    .textbox input {
+      border: 0;
+      padding: 0 24px 0 44px;
+      color: #f9f9f9;
+      background: rgb(255 255 255 / 4%);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgb(255 255 255 / 32%);
+    }
+
+    button {
+      border: 0;
+      color: #f9f9f9;
+      background: rgb(255 255 255 / 8%);
+      display: grid;
+      place-items: center;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background: #6a65ff;
+    }
+
+    footer {
+      margin-top: 16px;
+      color: rgb(255 255 255 / 38%);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #f9f9f9;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (width >= 450px) {
+      .card {
+        margin: 0;
+        width: 380px;
+      }
+    }
+  </style></head>
 <body>
-<div id="auth-overlay">
-    <div class="auth-card">
-        <h2>FLOURFLOW Login</h2>
-        <input type="text" id="username" class="auth-input" placeholder="Логин">
-        <input type="password" id="password" class="auth-input" placeholder="Пароль">
-        <button onclick="handleLogin()" class="auth-btn">Войти в систему</button>
+    <div id="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; justify-content: center; align-items: center; background: #0d0e12;">
+        
+
+  <div class="background"></div>
+
+  <div id="auth-card-container" class="card">
+    <img src="./logo.svg" alt="Логотип" onerror="this.src='https://via.placeholder.com/100'" />
+
+    <!-- Окно Входа -->
+    <div id="login-box" class="form-container active">
+      <h2>С возвращением!</h2>
+
+      <form onsubmit="event.preventDefault();">
+        <div class="textbox">
+          <i class="ai-envelope"></i>
+          <input type="email" id="username" placeholder="Логин / Email" required />
+        </div>
+
+        <div class="textbox">
+          <i class="ai-lock-on"></i>
+          <input type="password" id="password" placeholder="Пароль" required />
+        </div>
+
+        <button type="button" onclick="handleLogin()">Войти</button>
+        <a href="#" class="forgot-link">Забыли пароль?</a>
+      </form>
+
+      <footer>
+        Нет аккаунта? <a href="#" onclick="showRegister()">Зарегистрироваться</a>
+      </footer>
     </div>
+
+    <!-- Окно Регистрации -->
+    <div id="register-box" class="form-container">
+      <h2>Создать аккаунт</h2>
+
+      <form onsubmit="event.preventDefault();">
+        <div class="textbox">
+          <i class="ai-envelope"></i>
+          <input type="email" id="username" placeholder="Логин / Email" required />
+        </div>
+
+        <div class="textbox">
+          <i class="ai-phone"></i>
+          <input type="tel" placeholder="Номер телефона" required />
+        </div>
+
+        <div class="textbox">
+          <i class="ai-lock-on"></i>
+          <input type="password" id="password" placeholder="Пароль" required />
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+      </form>
+
+      <footer>
+        Уже есть аккаунт? <a href="#" onclick="showLogin()">Войти</a>
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    function showRegister() {
+      document.getElementById('login-box').classList.remove('active');
+      document.getElementById('register-box').classList.add('active');
+    }
+
+    function showLogin() {
+      document.getElementById('register-box').classList.remove('active');
+      document.getElementById('login-box').classList.add('active');
+    }
+  </script>
+
+
+    </div>
+    
+
 </div>
 
 <div id="loginLayer" class="login-bg">
@@ -510,6 +748,37 @@ window.addEventListener('storage',()=>{state=loadState();refreshAllPagesLight();
         if (token) {
             document.getElementById('auth-overlay').style.display = 'none';
             window.loadStock();
+        }
+    });
+})();
+</script>
+
+<script>
+(function() {
+    window.handleLogin = async function() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        
+        if(!user || !pass) { alert('Введите логин и пароль'); return; }
+
+        const res = await window.apiRequest('/login', 'POST', { username: user, password: pass });
+        
+        if (res && res.token) {
+            localStorage.setItem('flourflow_token', res.token);
+            localStorage.setItem('flourflow_user', res.user);
+            localStorage.setItem('flourflow_role', res.role);
+            document.getElementById('auth-overlay').style.display = 'none';
+            alert('✅ Добро пожаловать, ' + res.user);
+            if (window.loadStock) window.loadStock();
+        } else {
+            alert('❌ Ошибка: Неверный логин или пароль');
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('flourflow_token');
+        if (token) {
+            document.getElementById('auth-overlay').style.display = 'none';
         }
     });
 })();
