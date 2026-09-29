@@ -1,0 +1,64 @@
+/* Тёмная / светлая тема + переключатель языка */
+.lang-switch{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.54);height:39px;align-items:center}
+.lang-switch button{border:0;background:transparent;border-radius:11px;height:31px;min-width:38px;font-size:11px;font-weight:760;color:var(--muted)}
+.lang-switch button.on{background:var(--dark);color:#fff}
+.theme-btn{width:39px;height:39px;padding:0}.theme-btn .i-sun{display:none}
+.drawer-tools{display:flex;gap:8px;align-items:center;margin:0 0 12px}
+/* fix: иконки меню в свёрнутой панели (в оригинале их скрывало .side-nav span{opacity:0}) */
+.side-nav .icon{opacity:1}
+.page-loading{padding:60px;text-align:center;color:var(--muted)}
+html[data-theme=dark]{color-scheme:dark;--accent:#5f7350;--dark:#e6ece4;--dark2:#f2f5f0;--green:#8aa079;--bg:#141a15;--paper:#1b231c;--glass:rgba(34,44,36,.72);--glass2:rgba(34,44,36,.55);--line:rgba(255,255,255,.10);--muted:#9aa59a;--shadow:0 24px 70px rgba(0,0,0,.45),0 4px 18px rgba(0,0,0,.3);--shadow2:0 16px 38px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);--ok:#86ab87;--warn:#d0a663;--danger:#d08888;--info:#8aa0b6;--purple:#a396dd}
+html[data-theme=dark],html[data-theme=dark] body{background:radial-gradient(circle at 12% -8%,rgba(107,127,91,.20),transparent 30%),linear-gradient(180deg,#141a15 0%,#0f140f 100%);color:var(--dark)}
+html[data-theme=dark] .theme-btn .i-sun{display:block}html[data-theme=dark] .theme-btn .i-moon{display:none}
+html[data-theme=dark] .lang-switch{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .lang-switch button.on{background:var(--accent);color:#fff}
+html[data-theme=dark] .glass{border-color:rgba(255,255,255,.10)}
+html[data-theme=dark] .modal,html[data-theme=dark] .mobile-drawer{background:rgba(24,31,25,.97);border-color:rgba(255,255,255,.10)}
+html[data-theme=dark] .login-card{background:rgba(24,31,25,.97)}
+html[data-theme=dark] .mobile-bottom{background:rgba(24,31,25,.90);border-color:rgba(255,255,255,.10)}
+html[data-theme=dark] .donut:after{background:#1b231c}
+html[data-theme=dark] .badge{background:#243429;color:#a8c3a0}
+html[data-theme=dark] .badge.warn{background:#3a3222;color:#d9b878}
+html[data-theme=dark] .badge.danger{background:#3b2626;color:#d99a9a}
+html[data-theme=dark] .badge.dark{background:var(--accent);color:#fff}
+html[data-theme=dark] .nav-section,html[data-theme=dark] .drawer-section{color:#7f8a7f}
+html[data-theme=dark] .side-nav button,html[data-theme=dark] .drawer-nav button{color:#b4bdb3}
+html[data-theme=dark] .side-nav button.active,html[data-theme=dark] .drawer-nav button.active,html[data-theme=dark] .mobile-bottom button.active{color:#fff}
+html[data-theme=dark] input::placeholder{color:#7f8a7f}
+html[data-theme=dark] .toast{background:var(--accent)}
+html[data-theme=dark] .desktop-sidebar{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .side-nav button.active{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .system-pill{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .profile-trigger{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .searchbar{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .top-pill{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .icon-btn{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .btn{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .btn.primary{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .btn.ghost{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .glass{border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .factory-cell{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .donut:after{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .list-row{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .badge.dark{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .queue-row{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .arrow-btn{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .search input{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .chip{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .chip.active{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .data-table td{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .board-col{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .board-card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .detail-cell{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .field input,html[data-theme=dark] .field select,html[data-theme=dark] .field textarea{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .modal{border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .close{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .choice{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .login-card{background:rgba(255,255,255,.06)}
+html[data-theme=dark] .login-logo{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .telegram-login{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .mobile-drawer{border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .drawer-nav button.active{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .toast{background:var(--accent);border-color:var(--accent)}
+html[data-theme=dark] .mobile-bottom{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+html[data-theme=dark] .mobile-bottom button.active{background:var(--accent);border-color:var(--accent)}
