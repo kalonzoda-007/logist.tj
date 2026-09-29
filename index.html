@@ -17,6 +17,16 @@
     <script src="js/shell.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/i18n.js"></script>
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/themes.css">
+    
+    <script src="js/data.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/actions.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/shell.js"></script>
     </head>
 <body><div id="app"></div>
 <div id="loginLayer" class="login-bg">
@@ -100,6 +110,25 @@
             console.error('Init error:', e);
         }
     });
+</script>
+
+<script>
+    window.onload = function() {
+        console.log("FLOURFLOW: Booting system...");
+        try {
+            if (typeof App === 'function') {
+                new App().init();
+            } else if (typeof initApp === 'function') {
+                initApp();
+            } else if (typeof shellInit === 'function') {
+                shellInit();
+            } else {
+                console.log("Core loaded. Waiting for user interaction.");
+            }
+        } catch(e) {
+            console.error("System Boot Error:", e);
+        }
+    };
 </script>
 </body>
 </html>
